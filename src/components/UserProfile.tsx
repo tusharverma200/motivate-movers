@@ -1,5 +1,5 @@
 
-import { User, Trophy, Activity, Calendar } from "lucide-react";
+import { User, Trophy, Activity, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
