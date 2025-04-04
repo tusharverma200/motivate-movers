@@ -21,10 +21,7 @@ const App = () => {
   const user = useUser().isSignedIn;
   console.log(user)
   return (
-    <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+   
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<FitnessLandingPage />} />
@@ -36,8 +33,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+
   )
 
   
