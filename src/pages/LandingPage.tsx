@@ -20,11 +20,7 @@ const FitnessLandingPage = () => {
         </div>
       
           <Link to="/home" className="bg-primary hover:bg-blue-400 text-white font-medium py-2 px-6 rounded-full">
-            {!Login? 
-             <SignedOut>
-             <SignInButton />
-           </SignedOut>
-            :'Get Started'}
+            Get Started
           </Link>
           
         </div>
