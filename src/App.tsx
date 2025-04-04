@@ -18,7 +18,7 @@ import { useUser } from "@clerk/clerk-react";
 const App = () => {
   const queryClient = new QueryClient();
 
-  const user = useUser();
+  const user = useUser().isSignedIn;
   console.log(user)
   return (
     <QueryClientProvider client={queryClient}>
