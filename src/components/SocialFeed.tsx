@@ -3,64 +3,12 @@ import { useState } from "react";
 import { Heart, MessageSquare, Share2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUser } from "@clerk/clerk-react";
 
-// Mock data for social feed posts
-const mockPosts = [
-  {
-    id: "1",
-    user: {
-      name: "Sarah Miller",
-      avatar: "/placeholder.svg"
-    },
-    content: "Just completed my 10k run! Feeling amazing and one step closer to my marathon goal. 🏃‍♀️",
-    image: null,
-    timestamp: "2 hours ago",
-    likes: 24,
-    comments: 5,
-    workout: {
-      type: "Running",
-      duration: "45 min",
-      distance: "10 km"
-    }
-  },
-  {
-    id: "2",
-    user: {
-      name: "Mike Chen",
-      avatar: "/placeholder.svg"
-    },
-    content: "New personal best on chest day! Consistency is key, folks. 💪",
-    image: null,
-    timestamp: "5 hours ago",
-    likes: 18,
-    comments: 3,
-    workout: {
-      type: "Strength Training",
-      duration: "60 min",
-      exercises: ["Bench Press", "Incline Press", "Cable Flys"]
-    }
-  },
-  {
-    id: "3",
-    user: {
-      name: "Jasmine Park",
-      avatar: "/placeholder.svg"
-    },
-    content: "Morning yoga to start the day right. Who else makes time for mindfulness in their fitness routine?",
-    image: null,
-    timestamp: "8 hours ago",
-    likes: 32,
-    comments: 7,
-    workout: {
-      type: "Yoga",
-      duration: "30 min",
-      focus: "Flexibility & Balance"
-    }
-  }
-];
 
-const SocialFeed = () => {
+const SocialFeed = ({posts}) => {
   const [activeTab, setActiveTab] = useState("all");
+  const user = useUser();
 
   return (
     <div className="space-y-6">
@@ -72,19 +20,19 @@ const SocialFeed = () => {
         </TabsList>
         
         <TabsContent value="all" className="space-y-4 mt-4">
-          {mockPosts.map(post => (
+          {posts.map(post => (
             <PostCard key={post.id} post={post} />
           ))}
         </TabsContent>
         
         <TabsContent value="friends" className="space-y-4 mt-4">
-          {mockPosts.slice(0, 2).map(post => (
+          {posts.slice(0, 2).map(post => (
             <PostCard key={post.id} post={post} />
           ))}
         </TabsContent>
         
         <TabsContent value="trending" className="space-y-4 mt-4">
-          {mockPosts.slice(1, 3).map(post => (
+          {posts.slice(1, 3).map(post => (
             <PostCard key={post.id} post={post} />
           ))}
         </TabsContent>

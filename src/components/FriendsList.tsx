@@ -3,10 +3,12 @@ import { UserPlus, Check, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { mock } from "node:test";
 
 // Mock data for friends
-const mockFriends = [
+let mockFriends = [
   { id: "1", name: "Emma Wilson", avatar: "/placeholder.svg", status: "friend", streak: 8, goal: "5k Training" },
   { id: "2", name: "James Lee", avatar: "/placeholder.svg", status: "friend", streak: 15, goal: "Weight Loss" },
   { id: "3", name: "Olivia Martinez", avatar: "/placeholder.svg", status: "friend", streak: 21, goal: "Muscle Building" },
@@ -14,14 +16,14 @@ const mockFriends = [
 ];
 
 // Mock data for suggestions
-const mockSuggestions = [
+let mockSuggestions = [
   { id: "5", name: "Sophia Johnson", avatar: "/placeholder.svg", status: "suggestion", mutualFriends: 3 },
   { id: "6", name: "William Brown", avatar: "/placeholder.svg", status: "suggestion", mutualFriends: 2 },
   { id: "7", name: "Ava Davis", avatar: "/placeholder.svg", status: "suggestion", mutualFriends: 4 },
 ];
 
 // Mock data for requests
-const mockRequests = [
+let mockRequests = [
   { id: "8", name: "Liam Garcia", avatar: "/placeholder.svg", status: "request", mutualFriends: 1 },
   { id: "9", name: "Mia Rodriguez", avatar: "/placeholder.svg", status: "request", mutualFriends: 2 },
 ];
@@ -31,6 +33,38 @@ const FriendsList = () => {
   const [friends, setFriends] = useState(mockFriends);
   const [suggestions, setSuggestions] = useState(mockSuggestions);
   const [requests, setRequests] = useState(mockRequests);
+
+useEffect(()=>{
+
+  const getResponse = async () => {
+    try {
+      const response = await axios.get("https://dummyjson.com/users")
+     console.log(response.data.users)
+     const data = response.data.users
+     let i=0;
+while(i<response.data.users.length){
+  for( let j =0; j<mockFriends.length; j++){
+    mockFriends[j].avatar = data[i].image
+    i++;
+  }
+  for( let j =0; j<mockSuggestions.length; j++){
+    mockSuggestions[j].avatar = data[i].image
+    i++;
+  }
+  for( let j =0; j<mockRequests.length; j++){
+    mockRequests[j].avatar = data[i].image
+    i++;
+  }
+  break;
+}
+
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
+  }
+
+  getResponse()
+})
   
   const handleAddFriend = (id: string) => {
     const updatedSuggestions = suggestions.filter(suggestion => suggestion.id !== id);

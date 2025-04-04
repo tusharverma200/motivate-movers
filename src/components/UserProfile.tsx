@@ -2,16 +2,20 @@
 import { User, Trophy, Activity, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useUser } from "@clerk/clerk-react";
 
 interface UserProfileProps {
   compact?: boolean;
 }
 
 const UserProfile = ({ compact = false }: UserProfileProps) => {
+  const userProfile = useUser();
+  const userName = userProfile.user?.fullName || "User";
+ const userAvatar = userProfile.user?.imageUrl || "/placeholder.svg";
   // Mock user data
   const user = {
-    name: "Alex Johnson",
-    avatar: "/placeholder.svg",
+    name: userName,
+    avatar: userAvatar,
     streak: 12,
     workoutsCompleted: 48,
     currentGoal: "Lose 10 pounds",
@@ -57,7 +61,7 @@ const UserProfile = ({ compact = false }: UserProfileProps) => {
         
         <div className="flex-1 text-center sm:text-left">
           <h2 className="text-2xl font-bold">{user.name}</h2>
-          <p className="text-muted-foreground mb-4">Joined {user.joinDate}</p>
+         
           
           <div className="mb-4">
             <div className="flex justify-between items-center mb-1">
@@ -85,9 +89,7 @@ const UserProfile = ({ compact = false }: UserProfileProps) => {
             </div>
           </div>
           
-          <Button className="bg-primary hover:bg-primary/90 text-white fitness-button">
-            Edit Profile
-          </Button>
+      
         </div>
       </div>
     </div>

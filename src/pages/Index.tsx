@@ -1,46 +1,83 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import SocialFeed from "@/components/SocialFeed";
 import UserProfile from "@/components/UserProfile";
 import WorkoutCard from "@/components/WorkoutCard";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
 
-// Mock data for recommended workouts
-const recommendedWorkouts = [
+const mockPosts = [
   {
     id: "1",
-    title: "Morning HIIT Blast",
-    category: "HIIT",
-    duration: 25,
-    difficulty: "Intermediate" as const,
-    exercises: 8,
-    likes: 156
+    user: {
+      name: "Sarah Miller",
+      avatar: "/placeholder.svg"
+    },
+    content: "Just completed my 10k run! Feeling amazing and one step closer to my marathon goal. 🏃‍♀️",
+    image: null,
+    timestamp: "2 hours ago",
+    likes: 24,
+    comments: 5,
+    workout: {
+      type: "Running",
+      duration: "45 min",
+      distance: "10 km"
+    }
   },
   {
     id: "2",
-    title: "Full Body Strength",
-    category: "Strength",
-    duration: 45,
-    difficulty: "Beginner" as const,
-    exercises: 12,
-    likes: 248
+    user: {
+      name: "Mike Chen",
+      avatar: "/placeholder.svg"
+    },
+    content: "New personal best on chest day! Consistency is key, folks. 💪",
+    image: null,
+    timestamp: "5 hours ago",
+    likes: 18,
+    comments: 3,
+    workout: {
+      type: "Strength Training",
+      duration: "60 min",
+      exercises: ["Bench Press", "Incline Press", "Cable Flys"]
+    }
   },
   {
     id: "3",
-    title: "Yoga Flow",
-    category: "Yoga",
-    duration: 30,
-    difficulty: "Beginner" as const,
-    exercises: 10,
-    likes: 187
+    user: {
+      name: "Jasmine Park",
+      avatar: "/placeholder.svg"
+    },
+    content: "Morning yoga to start the day right. Who else makes time for mindfulness in their fitness routine?",
+    image: null,
+    timestamp: "8 hours ago",
+    likes: 32,
+    comments: 7,
+    workout: {
+      type: "Yoga",
+      duration: "30 min",
+      focus: "Flexibility & Balance"
+    }
   }
 ];
 
 const Index = () => {
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [postContent, setPostContent] = useState("");
+  const Posts = JSON.parse(localStorage.getItem("posts"));
+  const [posts, setPosts] = useState(Posts || mockPosts); // ← Import this from SocialFeed file or move it here
+  const user = useUser();
+  const recommended = JSON.parse(localStorage.getItem("recommendedWorkouts"));
+  localStorage.setItem("posts", JSON.stringify(posts));
+
+  useEffect(()=>{
+
+   const response =  axios.get("https://wger.de/api/v2/muscle/")
+     console.log(response)
+  }, [])
   
   return (
     <div className="pb-20 sm:pb-0">
@@ -54,11 +91,11 @@ const Index = () => {
             <div className="fitness-card">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-lg">Recommended Workouts</h2>
-                <Button variant="ghost" size="sm" className="text-primary">View All</Button>
+                <Link to="/workouts" variant="ghost" size="sm" className="text-primary">View All</Link>
               </div>
               
               <div className="space-y-3">
-                {recommendedWorkouts.map(workout => (
+                {recommended.slice(1,4).map(workout => (
                   <WorkoutCard key={workout.id} workout={workout} compact />
                 ))}
               </div>
@@ -94,13 +131,37 @@ const Index = () => {
                     >
                       Cancel
                     </Button>
-                    <Button className="bg-primary hover:bg-primary/90 text-white">Post</Button>
+                    <Button
+  onClick={() => {
+    const newPost = {
+      id: Date.now().toString(),
+      user: {
+        name: user.user?.fullName || "User",
+        avatar: user.user?.imageUrl || "/placeholder.svg"
+      },
+      content: postContent,
+      timestamp: "Just now",
+      likes: 0,
+      comments: 0,
+      image: null,
+      workout: null
+    };
+
+    setPosts([newPost, ...posts]);
+    setPostContent("");
+    setShowCreatePost(false);
+  }}
+  className="bg-primary hover:bg-primary/90 text-white"
+>
+  Post
+</Button>
+
                   </div>
                 </div>
               )}
             </div>
             
-            <SocialFeed />
+            <SocialFeed posts={Posts} />
           </div>
         </div>
       </main>

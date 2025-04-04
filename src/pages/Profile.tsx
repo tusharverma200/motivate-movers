@@ -6,6 +6,7 @@ import WorkoutCard from "@/components/WorkoutCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
 
 // Mock data for user goals
 const userGoals = [
@@ -40,41 +41,12 @@ const userGoals = [
   }
 ];
 
-// Mock data for completed workouts
-const completedWorkouts = [
-  {
-    id: "1",
-    title: "HIIT Cardio Blast",
-    category: "HIIT",
-    duration: 30,
-    difficulty: "Intermediate" as const,
-    exercises: 10,
-    likes: 5,
-    date: "Today"
-  },
-  {
-    id: "2",
-    title: "Upper Body Strength",
-    category: "Strength",
-    duration: 45,
-    difficulty: "Advanced" as const,
-    exercises: 8,
-    likes: 12,
-    date: "Yesterday"
-  },
-  {
-    id: "3",
-    title: "Yoga for Flexibility",
-    category: "Yoga",
-    duration: 20,
-    difficulty: "Beginner" as const,
-    exercises: 6,
-    likes: 8,
-    date: "3 days ago"
-  }
-];
 
 const Profile = () => {
+
+   const Goals = JSON.parse(localStorage.getItem("userGoals")) || userGoals;
+const workouts = JSON.parse(localStorage.getItem("recommendedWorkouts"));
+
   return (
     <div className="pb-20 sm:pb-0">
       <Navbar />
@@ -98,7 +70,7 @@ const Profile = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {userGoals.map(goal => (
+                {Goals.map(goal => (
                   <GoalCard key={goal.id} goal={goal} />
                 ))}
               </div>
@@ -113,7 +85,7 @@ const Profile = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {completedWorkouts.map(workout => (
+                {workouts.slice(0,3).map(workout => (
                   <div key={workout.id} className="space-y-1">
                     <WorkoutCard workout={workout} />
                     <div className="text-sm text-muted-foreground px-2">
