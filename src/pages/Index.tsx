@@ -10,6 +10,34 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 
+interface Muscle {
+  id: number;
+  name: string;
+  name_en: string;
+  image_url_main?: string;
+}
+
+interface Equipment {
+  id: number;
+  name: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface WgerWorkout {
+  id: number;
+  category: Category;
+  description: string;
+  equipment: Equipment[];
+  muscles: Muscle[];
+  muscles_secondary: Muscle[];
+  image?: string;
+}
+
+
 const mockPosts = [
   {
     id: "1",
@@ -73,6 +101,10 @@ const Index = () => {
   const recommended = JSON.parse(localStorage.getItem("recommendedWorkouts"));
   localStorage.setItem("posts", JSON.stringify(posts));
 
+  const handleAddToFavourites = (workout: WgerWorkout) => {
+    // Avoid duplicates
+   console.log(workout)
+  };
   useEffect(()=>{
 
    const response =  axios.get("https://wger.de/api/v2/muscle/")
@@ -91,12 +123,12 @@ const Index = () => {
             <div className="fitness-card">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-lg">Recommended Workouts</h2>
-                <Link to="/workouts" variant="ghost" size="sm" className="text-primary">View All</Link>
+                <Link to="/workouts"  className="text-primary text-sm">View All</Link>
               </div>
               
               <div className="space-y-3">
                 {recommended.slice(1,4).map(workout => (
-                  <WorkoutCard key={workout.id} workout={workout} compact />
+                  <WorkoutCard key={workout.id} workout={workout} onAddToFavourites={handleAddToFavourites}  />
                 ))}
               </div>
             </div>

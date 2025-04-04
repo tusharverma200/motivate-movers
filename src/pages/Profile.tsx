@@ -8,6 +8,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
 
+interface Muscle {
+  id: number;
+  name: string;
+  name_en: string;
+  image_url_main?: string;
+}
+
+interface Equipment {
+  id: number;
+  name: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface WgerWorkout {
+  id: number;
+  category: Category;
+  description: string;
+  equipment: Equipment[];
+  muscles: Muscle[];
+  muscles_secondary: Muscle[];
+  image?: string;
+}
+
+
 // Mock data for user goals
 const userGoals = [
   {
@@ -46,7 +74,10 @@ const Profile = () => {
 
    const Goals = JSON.parse(localStorage.getItem("userGoals")) || userGoals;
 const workouts = JSON.parse(localStorage.getItem("recommendedWorkouts"));
-
+const handleAddToFavourites = (workout: WgerWorkout) => {
+  // Avoid duplicates
+ console.log(workout)
+};
   return (
     <div className="pb-20 sm:pb-0">
       <Navbar />
@@ -87,7 +118,7 @@ const workouts = JSON.parse(localStorage.getItem("recommendedWorkouts"));
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {workouts.slice(0,3).map(workout => (
                   <div key={workout.id} className="space-y-1">
-                    <WorkoutCard workout={workout} />
+                    <WorkoutCard workout={workout} onAddToFavourites={handleAddToFavourites} />
                     <div className="text-sm text-muted-foreground px-2">
                       Completed {workout.date}
                     </div>

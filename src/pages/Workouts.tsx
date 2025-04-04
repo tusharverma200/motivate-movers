@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Filter, Dumbbell, Heart, Clock, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
 import axios from "axios";
-import type { WgerWorkout } from "../components/WorkoutCard"; 
+import  WgerWorkout  from "../components/WorkoutCard"; 
 // Mock data for workouts
 
 interface Muscle {
