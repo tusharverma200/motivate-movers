@@ -11,7 +11,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-"deploy": "gh-pages -d build"
+
+    "deploy": "gh-pages -d dist",
+  
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.25.6",
