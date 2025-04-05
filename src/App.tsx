@@ -25,11 +25,11 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<FitnessLandingPage />} />
-          <Route path="/home" element={ <Index />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/workouts" element={<Workouts />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/friends" element={<Friends />} />
+          <Route path="/home" element={ user?<Index />:<Navigate to="/" />} />
+           <Route path="/profile" element={user?<Profile />:<Navigate to="/" />} />
+           <Route path="/workouts" element={user?<Workouts />:<Navigate to="/" />} />
+           <Route path="/progress" element={user?<Progress />:<Navigate to="/" />} />
+           <Route path="/friends" element={user?<Friends />:<Navigate to="/" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
