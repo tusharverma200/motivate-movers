@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,30 +12,34 @@ import NotFound from "./pages/NotFound";
 import FitnessLandingPage from "./pages/LandingPage";
 import { useUser } from "@clerk/clerk-react";
 
-
-
 const App = () => {
   const queryClient = new QueryClient();
+  const { isSignedIn, isLoaded } = useUser();
 
-  const user = useUser().isSignedIn;
-  console.log(user)
+  if (!isLoaded) {
+    // You can return a loader here if desired
+    return <div>Loading...</div>;
+  }
+
   return (
-   
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<FitnessLandingPage />} />
-          <Route path="/home" element={ user?<Index />:<Navigate to="/" />} />
-           <Route path="/profile" element={user?<Profile />:<Navigate to="/" />} />
-           <Route path="/workouts" element={user?<Workouts />:<Navigate to="/" />} />
-           <Route path="/progress" element={user?<Progress />:<Navigate to="/" />} />
-           <Route path="/friends" element={user?<Friends />:<Navigate to="/" />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-
-  )
-
-  
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<FitnessLandingPage />} />
+            <Route path="/home" element={isSignedIn ? <Index /> : <Navigate to="/" />} />
+            <Route path="/profile" element={isSignedIn ? <Profile /> : <Navigate to="/" />} />
+            <Route path="/workouts" element={isSignedIn ? <Workouts /> : <Navigate to="/" />} />
+            <Route path="/progress" element={isSignedIn ? <Progress /> : <Navigate to="/" />} />
+            <Route path="/friends" element={isSignedIn ? <Friends /> : <Navigate to="/" />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default App;
