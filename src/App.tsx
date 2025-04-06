@@ -15,6 +15,9 @@ import { useUser } from "@clerk/clerk-react";
 const App = () => {
   const queryClient = new QueryClient();
   const { isSignedIn, isLoaded } = useUser();
+  console.log("isSignedIn", isSignedIn);
+  console.log("isLoaded", isLoaded);
+  console.log("user", useUser());
 
   if (!isLoaded) {
     // You can return a loader here if desired
@@ -26,12 +29,12 @@ const App = () => {
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<FitnessLandingPage />} />
-            <Route path="/home" element={ <Index /> } />
-            <Route path="/profile" element={ <Profile /> } />
-            <Route path="/workouts" element={ <Workouts /> } />
-            <Route path="/progress" element={ <Progress /> } />
-            <Route path="/friends" element={ <Friends /> } />
+            <Route path="/" element={ <FitnessLandingPage />} />
+            <Route path="/home" element={ isSignedIn? <Index />: <Navigate to="/"/> } />
+            <Route path="/profile" element={ isSignedIn? <Profile />: <Navigate to="/"/> } />
+            <Route path="/workouts" element={isSignedIn?  <Workouts />: <Navigate to="/"/> } />
+            <Route path="/progress" element={isSignedIn?  <Progress />: <Navigate to="/"/> } />
+            <Route path="/friends" element={ isSignedIn?  <Friends /> : <Navigate to="/"/>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
